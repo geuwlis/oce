@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Star for Oce 🌟</title>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&family=Sacramento&display=swap" rel="stylesheet">
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at center, #1b2735 0%, #090a0f 100%);
+    font-family: 'Quicksand', sans-serif;
+    overflow: hidden;
+    color: #e0f2fe;
+  }
+
+  .star-bg {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    animation: kedip 3s infinite alternate;
+    pointer-events: none;
+  }
+  @keyframes kedip {
+    0% { opacity: 0.2; transform: scale(0.8); }
+    100% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 10px white; }
+  }
+
+  .main-star {
+    position: relative;
+    font-size: 80px;
+    cursor: pointer;
+    animation: floatStar 3s ease-in-out infinite, glow 2s infinite alternate;
+    z-index: 2;
+    user-select: none;
+    transition: transform 0.3s;
+  }
+  
+  .main-star:hover {
+    transform: scale(1.1);
+  }
+
+  @keyframes floatStar {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+  }
+
+  @keyframes glow {
+    from { text-shadow: 0 0 20px #fff, 0 0 30px #38bdf8, 0 0 40px #38bdf8; }
+    to { text-shadow: 0 0 30px #fff, 0 0 40px #38bdf8, 0 0 60px #38bdf8, 0 0 80px #38bdf8; }
+  }
+
+  .hint-text {
+    position: absolute;
+    bottom: 30%;
+    font-size: 14px;
+    color: #93c5fd;
+    letter-spacing: 2px;
+    animation: kedip 2s infinite alternate;
+  }
+
+  .letter-card {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -40%) scale(0.9);
+    width: 85%;
+    max-width: 400px;
+    max-height: 85vh; 
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 30px 25px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    text-align: center;
+    z-index: 10;
+    overflow-y: auto;
+  }
+
+  .letter-card.show {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  .foto-wrapper {
+    width: 110px;
+    height: 110px;
+    margin: 0 auto 20px auto;
+    border-radius: 50%; 
+    background: linear-gradient(135deg, #7dd3fc, #38bdf8); 
+    padding: 4px; 
+    box-shadow: 0 0 25px rgba(125, 211, 252, 0.6); 
+    transition: transform 0.3s ease;
+  }
+
+  .foto-wrapper:hover {
+    transform: scale(1.05);
+  }
+
+  .foto-wrapper img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%; 
+    object-fit: cover; 
+    border: 2px solid #1b2735;
+  }
+
+  .judul-surat {
+    font-family: 'Sacramento', cursive;
+    font-size: 36px;
+    color: #7dd3fc; 
+    margin: 0 0 15px 0;
+    text-shadow: 0 0 10px rgba(125, 211, 252, 0.5);
+  }
+
+  .teks-surat {
+    font-size: 14px;
+    color: #f1f5f9;
+    line-height: 1.8;
+    margin-bottom: 15px;
+    text-align: left;
+  }
+  
+  .teks-surat b { color: #7dd3fc; }
+
+  .ttd {
+    font-family: 'Sacramento', cursive;
+    font-size: 28px;
+    color: #7dd3fc;
+    text-align: right;
+    margin-top: 25px;
+  }
+
+  .btn-tutup {
+    margin-top: 25px;
+    background: rgba(125, 211, 252, 0.2);
+    color: #bae6fd;
+    border: 1px solid #7dd3fc;
+    padding: 10px 25px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    font-family: 'Quicksand', sans-serif;
+    transition: all 0.3s;
+  }
+  
+  .btn-tutup:hover {
+    background: #7dd3fc;
+    color: #0f172a;
+  }
+
+  .overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(5px);
+    z-index: 9;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+  }
+
+  .overlay.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+</style>
+</head>
+<body>
+
+  <div class="main-star" onclick="bukaSurat()">🌟</div>
+  <div class="hint-text">Sentuh bintangnya...</div>
+
+  <div class="overlay" id="overlay" onclick="tutupSurat()"></div>
+
+  <div class="letter-card" id="surat">
+    <div class="foto-wrapper">
+      <img src="rg.jpeg" alt="Muse Kita">
+    </div>
+
+    <h1 class="judul-surat">Untuk Oce</h1>
+    
+    <div class="teks-surat">
+      <p>Halo Oce sayang...</p>
+      <p>Mommy cuma mau ngasih tau, kalau di antara miliaran bintang di langit sana, Oce itu salah satu bintang paling bersinar buat Mommy.</p>
+      <p>Makasih ya udah selalu jadi anak yang hebat dan membuat hidup mommy lebih berwarna. Kalau lagi capek sama dunia, kamu punya Mommy yang selalu siap jadi tempat pulang.</p>
+      <p>Jangan pernah ragu sama diri sendiri, Oce. Kamu jauh lebih kuat dan hebat dari yang kamu kira. Tetap bersinar, ya! </p>
+    </div>
+    
+    <div class="ttd">With love,<br>Mommy Senna</div>
+    
+    <button class="btn-tutup" onclick="tutupSurat()">Kembali ke Bintang</button>
+  </div>
+
+<script>
+  function buatBintang() {
+    const star = document.createElement('div');
+    star.classList.add('star-bg');
+    
+    const size = Math.random() * 2 + 1;
+    star.style.width = size + 'px';
+    star.style.height = size + 'px';
+    
+    star.style.left = Math.random() * 100 + 'vw';
+    star.style.top = Math.random() * 100 + 'vh';
+    
+    star.style.animationDelay = Math.random() * 3 + 's';
+    
+    document.body.appendChild(star);
+  }
+
+  for (let i = 0; i < 50; i++) {
+    buatBintang();
+  }
+
+  const surat = document.getElementById('surat');
+  const overlay = document.getElementById('overlay');
+
+  function bukaSurat() {
+    surat.classList.add('show');
+    overlay.classList.add('show');
+  }
+
+  function tutupSurat() {
+    surat.classList.remove('show');
+    overlay.classList.remove('show');
+  }
+</script>
+</body>
+</html>
